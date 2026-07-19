@@ -1,22 +1,28 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_mail import Mail, Message
+import os
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 # ==============================
-# Gmail Configuration
+# Gmail Configuration - Using Environment Variables
 # ==============================
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'makawanapriyanka3010@gmail.com'
-app.config['MAIL_PASSWORD'] = 'gafj jcag rjei eyly'
-app.config['MAIL_DEFAULT_SENDER'] = 'makawanapriyanka3010@gmail.com'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'makawanapriyanka3010@gmail.com')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'gafj jcag rjei eyly')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME', 'makawanapriyanka3010@gmail.com')
+
+# Add these for better reliability
+app.config['MAIL_DEBUG'] = True  # For debugging
+app.config['MAIL_SUPPRESS_SEND'] = False  # Ensure emails are actually sent
 
 mail = Mail(app)
+
 
 # ==============================
 # Home Page
